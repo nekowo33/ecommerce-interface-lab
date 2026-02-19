@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--Made by Member: Cosino, Vivian Faith C.-->
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>Account</title>
+</head>
+<body>
+
+
+   <header>
+       <h1>Welcome, Dear Customer!</h1>
+
+
+       <nav aria-label="Account Links">
+           <ul>
+               <li> <a href="#orders">Order History</a> </li>
+               <li> <a href="#profile">Profile Settings</a> </li>
+               <li> <a href="#wishlist">Wishlist</a> </li>
+               <li> <a href="signup.html">Log Out</a> </li>
+           </ul>
+       </nav>
+   </header>
+
+
+   <main>
+       <section id="orders">
+           <h2>Previous Purchases</h2>
+
+
+           <details>
+               <summary>Order #1001 - ₱1,200 (Roses Bouquet)</summary>
+               <p><strong>Date:</strong> Feb 10, 2026</p>
+               <p><strong>Status:</strong> Delivered</p>
+               <p><strong>Items:</strong> Roses Bouquet (x1)</p>
+           </details>
+
+
+           <details>
+               <summary>Order #1002 - ₱2,000 (Lilies Bouquet)</summary>
+               <p><strong>Date:</strong> Feb 11, 2026</p>
+               <p><strong>Status:</strong> Shipped</p>
+               <p><strong>Items:</strong> Lilies Bouquet (x1)</p>
+           </details>
+       </section>
+
+
+       <section id="profile">
+           <h2>Profile Settings</h2>
+
+
+           <form action="#" method="post">
+               <p>
+                   <label for="pname">Name:</label><br />
+                   <input type="text" id="pname" name="pname" value="Vivs" required>
+               </p>
+
+
+               <p>
+                   <label for="pemail">Email:</label><br />
+                   <input type="email" id="pemail" name="pemail" value="vivs@example.com" required>
+               </p>
+
+
+               <button type="submit">Save Changes</button>
+           </form>
+       </section>
+
+
+       <section id="wishlist">
+           <h2>Wishlist</h2>
+
+
+           <ul>
+               <li> Tulips Bouquet</li>
+               <li> Roses Bouquet</li>
+           </ul>
+       </section>
+   </main>
+
+
+   <footer>
+       <p>&copy; Holly's Garden 2026</p>
+   </footer>
+
+
+</body>
+</html>
