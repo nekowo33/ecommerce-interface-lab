@@ -2,63 +2,55 @@
 <!--Made by Member: Cosino, Vivian Faith C.-->
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <title>Sign Up</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Sign Up</title>
 </head>
 <body>
 
+<header>
+    <h1>Create an Account</h1>
+    <nav aria-label="Account Navigation">
+        <ul>
+            <li><a href="landing.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="signup.html" aria-current="page">Sign Up</a></li>
+            <li><a href="account.html">Account</a></li>
+        </ul>
+    </nav>
+</header>
 
-   <header>
-       <h1>Create an Account</h1>
-       <nav aria-label="Account Navigation>">
-           <ul>
-               <li> <a href="landing.html">Home</a></li>
-               <li> <a href="products.html">Products</a></li>
-               <li> <a href="signup.html" aria-current="page">Sign Up</a></li>
-               <li> <a href="account.html">Account</a></li>
-           </ul>
-       </nav>
-   </header>
+<main>
+    <h2>Sign Up Form</h2>
 
+    <form action="#" method="post">
+        <p>
+            <label for="name">Full Name:</label><br />
+            <input type="text" id="name" name="name" required />
+        </p>
 
-   <main>
-       <h2>Sign Up Form</h2>
+        <p>
+            <label for="email">Email:</label><br />
+            <input type="email" id="email" name="email" required />
+        </p>
 
+        <p>
+            <label for="password">Password:</label><br />
+            <input type="password" id="password" name="password" required />
+        </p>
 
-       <form action="#" method="post">
-           <p>
-               <label for="name">Full Name:</label><br />
-               <input type="text" id="name" name="name" required/>
-           </p>
+        <p>
+            <label for="confirm">Confirm Password:</label><br />
+            <input type="password" id="confirm" name="confirm" required />
+        </p>
 
+        <button type="submit">Create Account</button>
+    </form>
+</main>
 
-           <p>
-               <label for="email">Email:</label><br />
-               <input type="email" id="email" name="email" required/>
-           </p>
-
-
-           <p>
-               <label for="password">Password:</label><br />
-               <input type="password" id="password" name="password" required/>
-           </p>
-
-
-           <p>
-               <label for="confirm">Confirm Password:</label><br />
-               <input type="password" id="confirm" name="confirm" required/>
-           </p>
-
-
-           <button type="submit">Create Account</button>
-       </form>
-   </main>
-
-
-   <footer>
-       <p>&copy; Holly's Garden 2026</p>
-   </footer>
-
+<footer>
+    <p>&copy; Holly's Garden 2026</p>
+</footer>
 
 </body>
 </html>

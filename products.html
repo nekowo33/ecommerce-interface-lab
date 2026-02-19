@@ -2,102 +2,86 @@
 <!--Made by Member: Cosino, Vivian Faith C.-->
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <title>Products</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Products</title>
 </head>
 <body>
 
+<header>
+    <h1>Product Listing</h1>
+    <nav aria-label="Main Navigation">
+        <ul>
+            <li><a href="landing.html">Home</a> </li>
+            <li><a href="products.html" aria-current="page">Products</a> </li>
+            <li><a href="cart.html">Cart</a> </li>
+            <li><a href="account.html">Account</a> </li>
+        </ul>
+    </nav>
+</header>
 
-   <header>
-       <h1>Product Listing</h1>
-       <nav aria-label="Main Navigation">
-           <ul>
-               <li><a href="landing.html">Home</a> </li>
-               <li><a href="products.html" aria-current="page">Products</a> </li>
-               <li><a href="cart.html">Cart</a> </li>
-               <li><a href="account.html">Account</a> </li>
-           </ul>
-       </nav>
-   </header>
+<main>
+    <h2>All Products</h2>
 
+    <section aria-label="Product Grid">
+        <article>
+            <h3>Roses Bouquet</h3>
+            <img src="https://via.placeholder.com/200" alt="Roses Bouquet" />
+            <p>Price: <span class="price">1,200.00</span></p>
+            <a href="detail.html">View Details</a>
+        </article>
 
-   <main>
-       <h2>All Products</h2>
+        <article>
+            <h3>Tulips Bouquet</h3>
+            <img src="https://via.placeholder.com/200" alt="Tulips Bouquet" />
+            <p>Price: <span class="price">1,800.00</span></p>
+            <a href="detail.html">View Details</a>
+        </article>
 
+        <article>
+            <h3>Lilies Bouquet</h3>
+            <img src="https://via.placeholder.com/200" alt="Lilies Bouquet" />
+            <p>Price: <span class="price">2,000.00</span></p>
+            <a href="detail.html">View Details</a>
+        </article>
+    </section>
 
-       <section aria-label="Product Grid">
-           <article>
-               <h3>Rose Bouquet</h3>
-               <img src="https://via.placeholder.com/200" alt="Roses Bouquet" />
-               <p>Price: ₱1,200.00</p>
-               <a href="detail.html">View Details</a>
-           </article>
+    <h2>Filter Products</h2>
 
+    <form action="#" method="get">
+        <fieldset>
+            <legend>Categories (Checkbox)</legend>
 
-           <article>
-               <h3>Tulip Bouquet</h3>
-               <img src="https://via.placeholder.com/200" alt="Tulips Bouquet" />
-               <p>Price: ₱1,800.00</p>
-               <a href="detail.html">View Details</a>
-           </article>
+            <input type="checkbox" id="roses-bouquet" name="category" value="roses">
+            <label for="roses-bouquet">Roses Bouquet</label>
 
+            <input type="checkbox" id="tulips-bouquet" name="category" value="tulips">
+            <label for="tulips-bouquet">Tulips Bouquet</label>
 
-           <article>
-               <h3>Lily Bouquet</h3>
-               <img src="https://via.placeholder.com/200" alt="Lilies Bouquet" />
-               <p>Price: ₱2,000.00</p>
-               <a href="detail.html">View Details</a>
-           </article>
-       </section>
+            <input type="checkbox" id="lilies-bouquet" name="category" value="lilies">
+            <label for="lilies-bouquet">Lilies Bouquet</label>
+        </fieldset>
 
+        <fieldset>
+            <legend>Price Range</legend>
 
-       <h2>Filter Products</h2>
+            <input type="radio" id="p1" name="price" value="low">
+            <label for="p1">Below ₱1,000</label><br />
 
+            <input type="radio" id="p2" name="price" value="mid">
+            <label for="p2">₱1,250 - ₱1,750</label><br />
 
-       <form action="#" method="get">
-           <fieldset>
-               <legend>Categories (Checkbox)</legend>
+            <input type="radio" id="p3" name="price" value="mid">
+            <label for="p3">Above ₱1,750</label>
+        </fieldset>
 
+        <button type="submit">Apply Filters</button>
+    </form>
 
-               <input type="checkbox" id="roses-bouquet" name="category" value="roses">
-               <label for="roses-bouquet">Roses Bouquet</label>
+    <footer>
+        <p>&copy; Holly's Garden 2026</p>
+    </footer>
 
-
-               <input type="checkbox" id="tulips-bouquet" name="category" value="tulips">
-               <label for="tulips-bouquet">Tulips Bouquet</label>
-
-
-               <input type="checkbox" id="lilies-bouquet" name="category" value="lilies">
-               <label for="lilies-bouquet">Lilies Bouquet</label>
-           </fieldset>
-
-
-           <fieldset>
-               <legend>Price Range</legend>
-
-
-               <input type="radio" id="p1" name="price" value="low">
-               <label for="p1">Below ₱1,000</label><br />
-
-
-               <input type="radio" id="p2" name="price" value="mid">
-               <label for="p2">₱1,250 - ₱1,750</label><br />
-
-
-               <input type="radio" id="p3" name="price" value="mid">
-               <label for="p3">Above ₱1,750</label>
-           </fieldset>
-
-
-           <button type="submit">Apply Filters</button>
-       </form>
-
-
-   <footer>
-       <p>&copy; Holly's Garden 2026</p>
-   </footer>
-
-
-   </main>
+</main>
 </body>
 </html>
