@@ -37,6 +37,324 @@ button{
     transition: background-color 0.3s, color 0.3s, transform 0.1s;
 }
 
+
+  /* TASK 1 – The Visual Foundation (Global Styles) */
+  /* Made by Member: Novio, Mariel Kimberly B.*/
+
+/* --- Typography: Body --- */
+body {
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* --- Typography: Headings --- */
+h1 {
+    font-size: 2.2rem;
+    line-height: 1.2;
+    color: var(--c1);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+}
+
+h2 {
+    font-size: 1.6rem;
+    line-height: 1.3;
+    color: var(--c2);
+    margin-bottom: 0.4rem;
+}
+
+h3 {
+    font-size: 1.2rem;
+    line-height: 1.4;
+    color: var(--c1);
+    margin-bottom: 0.3rem;
+}
+
+/* --- Paragraphs --- */
+p {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+/* --- Labels --- */
+label {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--c1);
+}
+
+/* --- Global Image Defaults --- */
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+
+/* --- Header --- */
+header {
+    background-color: var(--c1);
+    color: #ffffff;
+    padding: 16px 24px;
+}
+
+header h1 {
+    color: #ffffff;
+    margin: 0 0 8px 0;
+}
+
+/* --- Navigation List --- */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 8px;
+}
+
+/* --- Navigation Links (base color overridden for header) --- */
+nav a {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 0.95rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background-color: transparent;
+    border: 2px solid transparent;
+}
+
+/* --- Footer --- */
+footer {
+    background-color: var(--c1);
+    color: #ffffff;
+    text-align: center;
+    padding: 14px;
+    font-size: 0.9rem;
+    margin-top: 40px;
+}
+
+footer p {
+    color: #ffffff;
+    margin: 0;
+}
+
+/* --- Main Content Area --- */
+main {
+    padding: 24px;
+    max-width: 960px;
+}
+
+/* --- Sections (Landing Page Hero, Featured Products, etc.) --- */
+section {
+    margin-bottom: 32px;
+    padding: 16px;
+}
+
+/* --- Hero Section Button (Shop Now) --- */
+section > button {
+    background-color: var(--c1);
+    color: #ffffff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1rem;
+    border-radius: 8px;
+    margin-top: 12px;
+}
+
+/* --- Fieldset & Legend (Checkout, Products Filter) --- */
+fieldset {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: var(--card);
+}
+
+legend {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: bold;
+    color: var(--c1);
+    padding: 0 8px;
+    font-size: 1rem;
+}
+
+/* --- Input, Select, Textarea General Styling --- */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 8px 12px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--card);
+    color: var(--text);
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 4px;
+}
+
+/* --- General Buttons --- */
+button[type="submit"],
+button[type="button"],
+button {
+    background-color: var(--c1);
+    color: #ffffff;
+    border: none;
+    padding: 10px 22px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    margin-top: 8px;
+}
+
+/* --- Table Styling (detail.html) --- */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 700px;
+    background-color: var(--card);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+}
+
+th {
+    color: var(--c1);
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: bold;
+    background-color: var(--c4);
+    width: 160px;
+}
+
+td {
+    color: var(--text);
+}
+
+/* --- Details/Summary (account.html order history) --- */
+details {
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 12px;
+    background-color: var(--card);
+}
+
+summary {
+    font-weight: bold;
+    color: var(--c1);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* --- Aside (checkout order summary) --- */
+aside {
+    background-color: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    max-width: 300px;
+    margin-top: 20px;
+}
+
+aside h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* --- Wishlist / Order History Lists --- */
+ul {
+    padding-left: 20px;
+}
+
+ul li {
+    margin-bottom: 6px;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+/* TASK 2 – Interactive States & Transitions */
+/* Made by Member: Novio, Mariel Kimberly B. */
+
+/* --- Nav links: hover overrides the global a:hover for header nav --- */
+nav a:hover {
+    background-color: var(--c4);
+    color: var(--c1);
+    text-decoration: none;
+    border: 2px solid var(--c1);
+}
+
+/* --- Nav links: active state --- */
+nav a:active {
+    background-color: var(--c2);
+    color: #ffffff;
+}
+
+/* --- Nav links: current page indicator --- */
+nav a[aria-current="page"] {
+    background-color: #ffffff;
+    color: var(--c1);
+    border: 2px solid var(--c4);
+}
+
+/* --- Section buttons (Shop Now, View Product): hover --- */
+section > button:hover {
+    background-color: var(--c2);
+    color: #ffffff;
+}
+
+/* --- Section buttons: active (pressed) --- */
+section > button:active {
+    transform: scale(0.97);
+    background-color: var(--c3);
+    color: var(--c1);
+}
+
+/* --- Submit buttons: hover --- */
+button[type="submit"]:hover {
+    background-color: var(--c2);
+    color: #ffffff;
+}
+
+/* --- Submit buttons: active (pressed) --- */
+button[type="submit"]:active {
+    transform: scale(0.97);
+    background-color: var(--c3);
+    color: var(--c1);
+}
+
+/* --- Input fields: hover --- */
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="password"]:hover,
+input[type="number"]:hover,
+select:hover,
+textarea:hover {
+    border-color: var(--c2);
+}
+
+/* --- Details summary: hover --- */
+summary:hover {
+    color: var(--c2);
+    text-decoration: underline;
+}
+
 /* TASK 2 – Interactive States */
 /*--Made by Member: Cosino, Vivian Faith C.--*/
 
@@ -80,7 +398,7 @@ textarea:focus{
 
 /* Product cards */
 section[aria-label="Product Grid"] article{
-    width: 260px;
+    width: 220px;
     display: inline-block;
     vertical-align: top;
     margin: 10px;
@@ -92,8 +410,9 @@ section[aria-label="Product Grid"] article{
 
 /* Product images */
 section[aria-label="Product Grid"] article img{
-    max-width: 100%;
-    height: auto;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
     border-radius: 10px;
 }
 
