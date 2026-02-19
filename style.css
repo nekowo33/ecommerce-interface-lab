@@ -1,0 +1,139 @@
+:root{
+    --c1: #EB4C4C;
+    --c2: #FF7070;
+    --c3: #FFA6A6;
+    --c4: #FFEDC7;
+
+    --text: #222222;
+    --bg: #FFEDC7;
+    --card: #ffffff;
+    --border: #FFA6A6;
+    --link: #EB4C4C;
+}
+
+body{
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3{
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: bold;
+}
+
+/* Make links/buttons clean for Task 2 */
+a{
+    text-decoration: none;
+    color: var(--link);
+    transition: background-color 0.3s, color 0.3s, text-decoration-color 0.3s;
+}
+
+button{
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, transform 0.1s;
+}
+
+/* TASK 2 – Interactive States */
+/*--Made by Member: Cosino, Vivian Faith C.--*/
+
+/* Hover effect */
+a:hover{
+    background-color: #FFEDC7;
+    color: #EB4C4C;
+    text-decoration: underline;
+}
+
+button:hover{
+    background-color: #FF7070;
+    color: #ffffff;
+}
+
+/* Active (pressed) effect */
+a:active{
+    background-color: #EB4C4C;
+    color: #ffffff;
+}
+
+button:active{
+    transform: scale(0.98);
+    background-color: #EB4C4C;
+    color: #ffffff;
+}
+
+/* Focus outline for accessibility */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus{
+    outline: 3px solid #EB4C4C;
+    outline-offset: 3px;
+}
+
+
+/* TASK 3 – Product Card Styling */
+/*--Made by Member: Cosino, Vivian Faith C.--*/
+
+/* Product cards */
+section[aria-label="Product Grid"] article{
+    width: 260px;
+    display: inline-block;
+    vertical-align: top;
+    margin: 10px;
+    padding: 12px;
+    border: 2px solid #FFA6A6;
+    border-radius: 14px;
+    background-color: #ffffff;
+}
+
+/* Product images */
+section[aria-label="Product Grid"] article img{
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* Alternating card colors */
+section[aria-label="Product Grid"] article:nth-child(odd){
+    background-color: #ffffff;
+}
+
+section[aria-label="Product Grid"] article:nth-child(even){
+    background-color: #FFEDC7;
+}
+
+
+/* TASK 4 – Advanced Selectors */
+/*--Cosino--*/
+
+/* #1 Empty cart container */
+ul:empty{
+    background: #FFEDC7;
+    border: 2px dashed #EB4C4C;
+    padding: 20px;
+}
+
+/* #2 Add currency symbol before prices */
+.price::before{
+    content: "₱";
+    margin-right: 2px;
+    font-weight: bold;
+}
+
+/* #3 Signup form required and valid inputs */
+form input:required{
+    border: 2px solid #FF7070;
+    padding: 8px;
+}
+
+form input:valid{
+    border: 2px solid #2e8b57;
+}
+
+form input:required:invalid{
+    border: 2px solid #EB4C4C;
+}
