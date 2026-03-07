@@ -361,6 +361,13 @@ summary:hover {
     text-decoration: underline;
 }
 
+/* Responsive Table Wrapper */
+.table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
 /* TASK 2 – Interactive States */
 /*--Made by Member: Cosino, Vivian Faith C.--*/
 
@@ -404,14 +411,19 @@ textarea:focus{
 
 /* Product cards */
 section[aria-label="Product Grid"] article{
-    width: 220px;
-    display: inline-block;
-    vertical-align: top;
-    margin: 10px;
+    width: auto;
+    display: block;
+    margin: 0px;
     padding: 12px;
     border: 2px solid #FFA6A6;
     border-radius: 14px;
     background-color: #ffffff;
+}
+
+section[aria-label="Product Grid"] {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
 }
 
 /* Product images */
@@ -431,6 +443,19 @@ section[aria-label="Product Grid"] article:nth-child(even){
     background-color: #FFEDC7;
 }
 
+section[aria-label="Product Grid"] article {
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.add-to-cart-btn:hover {
+    animation: pulse 0.4s ease infinite;
+}
+
+.hero h1,
+.hero p,
+.hero button {
+    animation: slideUp 0.7s ease-out forwards;
+}
 
 /* TASK 4 – Advanced Selectors */
 /*--Cosino--*/
@@ -464,6 +489,7 @@ form input:required:invalid{
 }
 
 
+
 /* Tablet */
 @media (min-width: 481px) {
 
@@ -480,5 +506,50 @@ form input:required:invalid{
 
     nav ul {
         justify-content: flex-end;
+    }
+}
+
+/* Tablet */
+@media (min-width: 481px) {
+    section[aria-label="Product Grid"] {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Desktop */
+@media (min-width: 769px) {
+    section[aria-label="Product Grid"] {
+        grid-template-columns: repeat(4 minmax(150px, 1fr));
+    }
+}
+
+/* Animation 1: Fade in for product cards */
+@keyframes fadein{
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation 2: Pulse on Add to Cart button hover */
+@keyframes pulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+/* Animation 3: Slide up for hero text */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
