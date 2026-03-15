@@ -580,6 +580,30 @@ form input:required:invalid{
     nav ul {
         justify-content: flex-end;
     }
+
+    .checkout-container{
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .checkout-container fieldset{
+        flex: 2;
+    }
+
+    .checkout-container aside{
+        flex: 1;
+        max-width: none;
+    }
+
+    .products-container {
+        grid-template-columns: 25% 1fr;
+        align-items: start;
+    }
+
+    .featured-card {
+        width: 400px;
+         margin: 10px auto;
+    }
 }
 
 /* Tablet */
