@@ -35,3 +35,21 @@ function calculateTotal(...numbers) {
     }
     return numbers.reduce((total, num) => total + num, 0);
 }
+
+//Problem 4: Leaderboard Filter [COSINO]
+const players = [
+    {name: "Mariel", score: 15},
+    {name: "Vivian", score: 15},
+    {name: "Princess", score: 14},
+    {name: "Ashlly", score: 9},
+    {name: "Jhon Reeve", score: 5},
+    {name: "Pauline", score: 8},
+    {name: "Jules", score: 10},
+    {name: "Joban", score: 4},
+    {name: "Kent", score: 6},
+    {name: "Keniel", score: 4},
+]
+
+function getTopScorers(playersList) {
+    return playersList.filter(players => players.score > 8).map(players => players.name).join(", ");
+}
