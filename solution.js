@@ -53,3 +53,20 @@ const players = [
 function getTopScorers(playersList) {
     return playersList.filter(players => players.score > 8).map(players => players.name).join(", ");
 }
+
+//Problem 5: The Private Inventory [COSINO]
+
+class Item {
+    #discount = 0.1 // 10%
+
+    constructor (name, price) {
+        this.name = name
+        this.price = price
+    }
+
+    get finalPrice  () {
+        return this.price - (this.price * this.#discount)
+    }
+}
+
+const myItem = new Item("Coffee", 100);
