@@ -27,3 +27,11 @@ function generateIDs(count) {
     }
     return ids;
 }
+
+// Problem 3: The Functional Sum [NOVIO]
+function calculateTotal(...numbers) {
+    if (numbers.some(num => typeof num !== 'number')) {
+        throw new TypeError("Invalid input: All arguments must be numbers");
+    }
+    return numbers.reduce((total, num) => total + num, 0);
+}
