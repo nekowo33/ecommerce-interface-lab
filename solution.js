@@ -70,3 +70,17 @@ class Item {
 }
 
 const myItem = new Item("Coffee", 100);
+
+//Problem 6: Robust Division [COSINO]
+function safeDivide(a, b) {
+    try {
+        if (b === 0) {
+            throw new Error("Cannot divide by zero");
+        }
+        return a/b;
+    } catch (error) {
+        return error.message;
+    } finally {
+        console.log("Operation attempted")
+    }
+}
