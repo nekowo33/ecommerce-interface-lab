@@ -650,3 +650,17 @@ form input:required:invalid{
         transform: translateY(0);
     }
 }
+
+/* Lab 6: Task 4 – Validation error styles */
+input.error {
+    border: 2px solid #EB4C4C;
+    background-color: #fff0f0;
+}
+
+.error-msg {
+    color: #EB4C4C;
+    font-size: 0.85rem;
+    display: block;
+    margin-top: 2px;
+    margin-bottom: 6px;
+}

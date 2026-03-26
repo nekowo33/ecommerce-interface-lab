@@ -70,3 +70,235 @@ if (productContainer) {
         productContainer.appendChild(article);
     });
 }
+
+//Task 3
+
+// State: array to hold cart items
+let cart = [];
+
+// Render the cart list and recalculate total
+function renderCart() {
+    const cartList = document.querySelector('main ul');
+    const subtotalSpan = document.querySelector('section[aria-label="Cart Subtotal"] .price');
+    const emptySection = document.querySelector('section[aria-label="Empty Cart Message"]');
+
+    if (!cartList) return;
+
+    // Clear the current list
+    cartList.innerHTML = '';
+
+    if (cart.length === 0) {
+        // Show empty cart message, hide subtotal
+        if (emptySection) emptySection.style.display = 'block';
+        if (subtotalSpan) subtotalSpan.textContent = '0.00';
+        return;
+    }
+
+    // Hide empty cart message when there are items
+    if (emptySection) emptySection.style.display = 'none';
+
+    // Loop through cart and build each list item
+    cart.forEach(function(item) {
+        const li = document.createElement('li');
+        li.classList.add('cart-item');
+        li.setAttribute('data-id', item.product.id);
+
+        const img = document.createElement('img');
+        img.src = item.product.image;
+        img.alt = item.product.name;
+
+        const nameSpan = document.createElement('span');
+        const nameText = document.createTextNode(item.product.name);
+        nameSpan.appendChild(nameText);
+
+        const priceSpan = document.createElement('span');
+        priceSpan.classList.add('price');
+        const priceText = document.createTextNode(
+            (item.product.price * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 2 })
+        );
+        priceSpan.appendChild(priceText);
+
+        // Quantity input
+        const qtyLabel = document.createElement('label');
+        const qtyLabelText = document.createTextNode('Qty: ');
+        qtyLabel.appendChild(qtyLabelText);
+
+        const qtyInput = document.createElement('input');
+        qtyInput.type = 'number';
+        qtyInput.value = item.quantity;
+        qtyInput.min = '0';
+        qtyInput.max = '10';
+        qtyInput.setAttribute('data-id', item.product.id);
+
+        // Update cart array when quantity changes
+        qtyInput.addEventListener('change', function() {
+            const newQty = parseInt(this.value);
+            const productId = parseInt(this.getAttribute('data-id'));
+
+            if (newQty <= 0) {
+                // Remove item from cart if quantity is 0
+                cart = cart.filter(function(cartItem) {
+                    return cartItem.product.id !== productId;
+                });
+            } else {
+                // Update the quantity
+                cart.forEach(function(cartItem) {
+                    if (cartItem.product.id === productId) {
+                        cartItem.quantity = newQty;
+                    }
+                });
+            }
+            renderCart();
+        });
+
+        qtyLabel.appendChild(qtyInput);
+
+        li.appendChild(img);
+        li.appendChild(nameSpan);
+        li.appendChild(qtyLabel);
+        li.appendChild(priceSpan);
+        cartList.appendChild(li);
+    });
+
+    // Calculate total using reduce
+    const total = cart.reduce(function(sum, item) {
+        return sum + (item.product.price * item.quantity);
+    }, 0);
+
+    if (subtotalSpan) {
+        subtotalSpan.textContent = total.toLocaleString('en-PH', { minimumFractionDigits: 2 });
+    }
+}
+
+// Event Delegation: single listener on document.body for "Add to Cart" clicks
+document.body.addEventListener('click', function(event) {
+    // Check if the clicked element is an Add to Cart button
+    if (event.target.classList.contains('add-to-cart')) {
+        const productId = parseInt(event.target.getAttribute('data-id'));
+
+        // Find the matching product in the products array
+        const foundProduct = products.filter(function(p) {
+            return p.id === productId;
+        })[0];
+
+        if (!foundProduct) return;
+
+        // Check if item is already in cart
+        const existingItem = cart.filter(function(item) {
+            return item.product.id === productId;
+        })[0];
+
+        if (existingItem) {
+            // Increase quantity if already in cart
+            existingItem.quantity += 1;
+        } else {
+            // Push new item as an object with product and quantity
+            cart.push({ product: foundProduct, quantity: 1 });
+        }
+
+        // Fade-in animation on the product card (Task 6)
+        const card = event.target.closest('article');
+        if (card) {
+            card.classList.add('fade-in');
+            setTimeout(function() {
+                card.classList.remove('fade-in');
+            }, 500);
+        }
+
+        // Re-render cart if on cart page
+        renderCart();
+    }
+});
+
+// Initial render when on cart page
+renderCart();
+
+
+//Task 4
+
+const checkoutForm = document.querySelector('.checkout-container form');
+
+if (checkoutForm) {
+    checkoutForm.addEventListener('submit', function(event) {
+        // Prevent the page from reloading immediately
+        event.preventDefault();
+
+        let isValid = true;
+
+        // Select all required input fields in the checkout container
+        const nameInput = document.querySelector('#name');
+        const regionInput = document.querySelector('#region');
+        const stateInput = document.querySelector('#state');
+        const addressInput = document.querySelector('#address');
+        const zipInput = document.querySelector('#zip');
+        const paymentInput = document.querySelector('input[name="payment"]:checked');
+
+        const fieldsToValidate = [nameInput, regionInput, stateInput, addressInput, zipInput];
+
+        // Validate each text field
+        fieldsToValidate.forEach(function(field) {
+            if (!field) return;
+
+            // Remove previous error state first
+            field.classList.remove('error');
+
+            // Check if empty
+            if (field.value.trim() === '') {
+                field.classList.add('error');
+
+                // Show error message below the field
+                let errorMsg = field.nextElementSibling;
+                if (!errorMsg || !errorMsg.classList.contains('error-msg')) {
+                    errorMsg = document.createElement('span');
+                    errorMsg.classList.add('error-msg');
+                    field.parentNode.insertBefore(errorMsg, field.nextSibling);
+                }
+                errorMsg.textContent = 'This field is required.';
+                isValid = false;
+            } else {
+                // Clear error message if valid
+                const errorMsg = field.nextElementSibling;
+                if (errorMsg && errorMsg.classList.contains('error-msg')) {
+                    errorMsg.textContent = '';
+                }
+            }
+        });
+
+        // Validate ZIP: must be numeric
+        if (zipInput && zipInput.value.trim() !== '' && isNaN(zipInput.value.trim())) {
+            zipInput.classList.add('error');
+            let zipError = zipInput.nextElementSibling;
+            if (!zipError || !zipError.classList.contains('error-msg')) {
+                zipError = document.createElement('span');
+                zipError.classList.add('error-msg');
+                zipInput.parentNode.insertBefore(zipError, zipInput.nextSibling);
+            }
+            zipError.textContent = 'ZIP Code must be a number.';
+            isValid = false;
+        }
+
+        // Validate payment method selection
+        if (!paymentInput) {
+            const paymentSection = document.querySelector('input[name="payment"]');
+            if (paymentSection) {
+                let paymentError = document.querySelector('.payment-error');
+                if (!paymentError) {
+                    paymentError = document.createElement('span');
+                    paymentError.classList.add('error-msg', 'payment-error');
+                    paymentSection.parentNode.appendChild(paymentError);
+                }
+                paymentError.textContent = 'Please select a payment method.';
+            }
+            isValid = false;
+        } else {
+            const paymentError = document.querySelector('.payment-error');
+            if (paymentError) paymentError.textContent = '';
+        }
+
+        // If all fields are valid, simulate redirect
+        if (isValid) {
+            console.log('Form is valid! Redirecting...');
+            window.location.href = 'thankyou.html';
+        }
+    });
+}
