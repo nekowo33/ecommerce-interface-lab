@@ -302,3 +302,70 @@ if (checkoutForm) {
         }
     });
 }
+
+//task 5
+
+const currentUser = {
+    name: "Jeon Jungkook",
+    email: "mnijungkook@example.com",
+    orderHistory: [
+        {
+            orderId: "#1001",
+            date: "February 10, 2026",
+            status: "Delivered",
+            items: "Roses Bouquet (1x)",
+            total: "₱1,200.00"
+        },
+        {
+            orderId: "#1002",
+            date: "March 4, 2026",
+            status: "Shipped",
+            items: "Tulips Bouquet (2x)",
+            total: "₱3,600.00"
+        }
+    ]
+};
+
+const accountHeader = document.querySelector('header h1');
+if (accountHeader) {
+    accountHeader.textContent = "Welcome, " + currentUser.name + "!";
+}
+
+const nameInput = document.querySelector('#pname');
+const emailInput = document.querySelector('#pemail');
+
+if (nameInput) {
+    nameInput.value = currentUser.name;
+}
+if (emailInput) {
+    emailInput.value = currentUser.email;
+}
+
+const summaries = document.querySelectorAll('details summary');
+
+summaries.forEach(function(summary, index) {
+    summary.addEventListener('click', function() {
+
+        const details = summary.parentElement;
+        const order = currentUser.orderHistory[index];
+
+        if (order && !details.open) {
+            const existing = details.querySelector('.order-details');
+            if (existing) existing.remove();
+
+            const orderDiv = document.createElement('div');
+            orderDiv.classList.add('order-details');
+
+            orderDiv.innerHTML = 
+                '<p><strong>Order ID:</strong> ' + order.orderId + '</p>' +
+                '<p><strong>Date:</strong> ' + order.date + '</p>' +
+                '<p><strong>Status:</strong> ' + order.status + '</p>' +
+                '<p><strong>Items:</strong> ' + order.items + '</p>' +
+                '<p><strong>Total:</strong> ' + order.total + '</p>' +
+                order.total.toLocaleString('en-PH', { minimumFractionDigits: 2 }); +
+                '</span></p>';
+
+            details.appendChild(orderDiv);
+        }
+    });
+});
