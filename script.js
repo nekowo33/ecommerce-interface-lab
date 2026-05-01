@@ -369,3 +369,125 @@ summaries.forEach(function(summary, index) {
         }
     });
 });
+
+// Task 5 - Fetch API Fundamentals
+
+// Base URL for the backend API
+const API_BASE_URL = 'http://localhost:8080/api/v1/products';
+
+/**
+ * Fetches all products from the backend API using async/await.
+ * Replaces the static products array with live data from the server.
+ * 
+ * @returns {Promise<Array>} A promise that resolves to an array of products.
+ * @throws {Error} If the response is not ok or a network error occurs.
+ */
+
+async function fetchProducts() {
+    try {
+        // Make GET request to the backend API
+        const response = await fetch(API_BASE_URL);
+
+        // Manually check if response is ok (status 200-299)
+        if (!response.ok) {
+            // Throw specific error messages based on status code
+            if (response.status === 404) {
+                throw new Error('Products not found (404).');
+            } else if (response.status === 500) {
+                throw new Error('Server error (500). Please try again later.');
+            } else {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        }
+
+        // Parse the JSON response
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        // Log specific error message to console for debugging
+        console.error('Fetch error:', error.message);
+        return [];
+    }
+}
+
+/**
+ * Renders the product grid dynamically by calling the API.
+ * Injects product cards into the product grid container.
+ * Handles the empty state if the API returns an empty list.
+ */
+async function renderProductsFromAPI() {
+    // Only run on products.html where the product grid exists
+    const productContainer = document.querySelector('section[aria-label="Product Grid"]');
+    if (!productContainer) return;
+
+    // Fetch products from the backend API
+    const apiProducts = await fetchProducts();
+
+    // Clear existing content
+    productContainer.innerHTML = '';
+
+    // Handle empty state if API returns no products
+    if (apiProducts.length === 0) {
+        const emptyMsg = document.createElement('p');
+        const emptyText = document.createTextNode('No products available at the moment.');
+        emptyMsg.appendChild(emptyText);
+        productContainer.appendChild(emptyMsg);
+        return;
+    }
+
+    // Dynamically inject product cards into the main product grid
+    apiProducts.forEach(function(product) {
+        const article = document.createElement('article');
+        article.setAttribute('data-id', product.id);
+
+        // Create heading
+        const heading = document.createElement('h3');
+        const headingText = document.createTextNode(product.name);
+        heading.appendChild(headingText);
+
+        // Create image
+        const img = document.createElement('img');
+        img.src = product.imageUrl;
+        img.alt = product.name;
+
+        // Create price paragraph
+        const pricePara = document.createElement('p');
+        const priceLabel = document.createTextNode('Price: ');
+        pricePara.appendChild(priceLabel);
+
+        const priceSpan = document.createElement('span');
+        priceSpan.classList.add('price');
+        const priceText = document.createTextNode(
+            product.price.toLocaleString('en-PH', { minimumFractionDigits: 2 })
+        );
+        priceSpan.appendChild(priceText);
+        pricePara.appendChild(priceSpan);
+
+        // Create View Details link
+        const detailLink = document.createElement('a');
+        detailLink.href = 'detail.html';
+        const detailText = document.createTextNode('View Details');
+        detailLink.appendChild(detailText);
+
+        // Create Add to Cart button
+        const addBtn = document.createElement('button');
+        addBtn.classList.add('add-to-cart');
+        addBtn.setAttribute('data-id', product.id);
+        const btnText = document.createTextNode('Add to Cart');
+        addBtn.appendChild(btnText);
+
+        // Append all elements to article
+        article.appendChild(heading);
+        article.appendChild(img);
+        article.appendChild(pricePara);
+        article.appendChild(detailLink);
+        article.appendChild(addBtn);
+
+        // Append article to product grid
+        productContainer.appendChild(article);
+    });
+}
+
+// Call fetchProducts on page load
+renderProductsFromAPI();
