@@ -662,10 +662,18 @@ if (signupForm) {
             });
 
             if (response.status === 400) {
-                const errorText = await response.text();
+                const errorData = await response.json();
                 signupMessage.style.display = 'block';
                 signupMessage.style.color = 'red';
-                signupMessage.textContent = errorText;
+                // Extract the message from the error response object
+                signupMessage.textContent = (errorData.message || 'Invalid input.').replace('[', '').replace(']', '');
+                return;
+            }
+
+            if (response.status === 500) {
+                signupMessage.style.display = 'block';
+                signupMessage.style.color = 'red';
+                signupMessage.textContent = 'Username must be between 3 and 50 characters and password must be at least 6 characters.';
                 return;
             }
 
