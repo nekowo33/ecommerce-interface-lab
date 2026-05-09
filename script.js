@@ -491,3 +491,175 @@ async function renderProductsFromAPI() {
 
 // Call fetchProducts on page load
 renderProductsFromAPI();
+
+// ============================================
+// TASK 6 – Handling Cookies & CSRF
+// Made by Member: Novio, Mariel Kimberly B.
+// ============================================
+
+// Base URL for authentication endpoints
+const AUTH_BASE_URL = 'http://localhost:8080';
+
+/**
+ * Fetches the CSRF token from the backend by making a GET request to /login.
+ * The token is then injected into the hidden CSRF input field in the form.
+ *
+ * @returns {Promise<string>} A promise that resolves to the CSRF token string.
+ * @throws {Error} If the CSRF token cannot be retrieved.
+ */
+async function fetchCsrfToken() {
+    try {
+        // Make GET request to /login to retrieve CSRF token
+        const response = await fetch(AUTH_BASE_URL + '/login', {
+            method: 'GET',
+            // Include credentials so browser sends/receives cookies (JSESSIONID)
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to retrieve CSRF token.');
+        }
+
+        // Parse the response to get the CSRF token
+        const data = await response.json();
+
+        // Inject the CSRF token into the hidden input field
+        const csrfInput = document.querySelector('#csrf-token');
+        if (csrfInput && data.token) {
+            csrfInput.value = data.token;
+        }
+
+        return data.token;
+
+    } catch (error) {
+        console.error('CSRF token fetch error:', error.message);
+    }
+}
+
+// Select the login form
+const loginForm = document.querySelector('#login-form');
+
+if (loginForm) {
+    // Fetch CSRF token on page load when on login page
+    fetchCsrfToken();
+
+    /**
+     * Handles login form submission.
+     * Sends username, password, and CSRF token to the backend.
+     * Ensures JSESSIONID cookie is sent with subsequent requests via credentials: include.
+     */
+    loginForm.addEventListener('submit', async function(event) {
+        // Prevent default form submission
+        event.preventDefault();
+
+        const username = document.querySelector('#username').value.trim();
+        const password = document.querySelector('#password').value.trim();
+        const csrfToken = document.querySelector('#csrf-token').value;
+        const loginError = document.querySelector('#login-error');
+
+        try {
+            // POST login credentials and CSRF token to backend
+            const response = await fetch(AUTH_BASE_URL + '/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                // credentials: include ensures browser sends and stores JSESSIONID cookie
+                credentials: 'include',
+                body: 'username=' + encodeURIComponent(username) +
+                      '&password=' + encodeURIComponent(password) +
+                      '&_csrf=' + encodeURIComponent(csrfToken)
+            });
+
+            // ============================================
+            // TASK 7 – Handling 401/403 Errors
+            // Made by Member: Novio, Mariel Kimberly B.
+            // ============================================
+
+            /**
+             * Intercepts 401 Unauthorized and 403 Forbidden errors.
+             * Redirects to login page on 401.
+             * Shows Access Denied message on 403.
+             */
+            if (response.status === 401) {
+                // 401: Not logged in - show error message
+                loginError.style.display = 'block';
+                loginError.textContent = 'Invalid username or password. Please try again.';
+                console.error('401 Unauthorized: Invalid credentials.');
+                return;
+            }
+
+            if (response.status === 403) {
+                // 403: Forbidden - show access denied message
+                loginError.style.display = 'block';
+                loginError.textContent = 'Access Denied. You do not have permission.';
+                console.error('403 Forbidden: Access denied.');
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error('Login failed with status: ' + response.status);
+            }
+
+            // Login successful - redirect to landing page
+            console.log('Login successful! Redirecting...');
+            window.location.href = 'landing.html';
+
+        } catch (error) {
+            // Show error message to user
+            loginError.style.display = 'block';
+            loginError.textContent = 'Login failed. Please try again.';
+            console.error('Login error:', error.message);
+        }
+    });
+}
+
+// ============================================
+// TASK 7 – Protected Routes
+// ============================================
+
+/**
+ * Checks if the user is logged in by fetching user info from the backend.
+ * Redirects to login page if the user is not authenticated (401).
+ * Shows Access Denied message if the user lacks permission (403).
+ *
+ * @returns {Promise<boolean>} True if logged in, false otherwise.
+ */
+async function checkAuth() {
+    try {
+        const response = await fetch(AUTH_BASE_URL + '/api/v1/user/me', {
+            method: 'GET',
+            // Send JSESSIONID cookie with request
+            credentials: 'include'
+        });
+
+        if (response.status === 401) {
+            // Not logged in - redirect to login page
+            console.error('401 Unauthorized: Redirecting to login.');
+            window.location.href = 'login.html';
+            return false;
+        }
+
+        if (response.status === 403) {
+            // Logged in but no permission - show access denied
+            console.error('403 Forbidden: Access denied.');
+            alert('Access Denied. You do not have permission to view this page.');
+            window.location.href = 'landing.html';
+            return false;
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error('Auth check error:', error.message);
+        window.location.href = 'login.html';
+        return false;
+    }
+}
+
+// Protect checkout.html - check if user is logged in before rendering
+const isCheckoutPage = document.querySelector('.checkout-container');
+if (isCheckoutPage) {
+    checkAuth();
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!--Made by Member: Novio, Mariel Kimberly B.-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Holly's Garden - Login</title>
+</head>
+<body>
+
+<header>
+    <h1>Holly's Garden</h1>
+    <nav>
+        <ul>
+            <li><a href="landing.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="login.html" aria-current="page">Login</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h2>Login</h2>
+
+    <form id="login-form" action="#" method="post">
+        <p>
+            <label for="username">Username:</label><br />
+            <input type="text" id="username" name="username" required />
+        </p>
+
+        <p>
+            <label for="password">Password:</label><br />
+            <input type="password" id="password" name="password" required />
+        </p>
+
+        <!-- CSRF token will be injected here by JavaScript -->
+        <input type="hidden" id="csrf-token" name="_csrf" value="" />
+
+        <button type="submit">Login</button>
+
+        <!-- Error message container -->
+        <p id="login-error" style="color: red; display: none;"></p>
+    </form>
+</main>
+
+<footer>
+    <p>&copy; Holly's Garden 2026</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
