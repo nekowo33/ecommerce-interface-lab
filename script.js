@@ -497,75 +497,81 @@ renderProductsFromAPI();
 // Made by Member: Novio, Mariel Kimberly B.
 // ============================================
 
-// Base URL for authentication endpoints
 const AUTH_BASE_URL = 'http://localhost:8080';
 
 /**
- * Fetches the CSRF token from the backend by making a GET request to /login.
- * The token is then injected into the hidden CSRF input field in the form.
+ * Gets the CSRF token from the XSRF-TOKEN cookie set by Spring Security.
+ * Spring Security automatically sets this cookie on the first request.
  *
- * @returns {Promise<string>} A promise that resolves to the CSRF token string.
- * @throws {Error} If the CSRF token cannot be retrieved.
+ * @returns {string} The CSRF token value from the cookie.
  */
-async function fetchCsrfToken() {
-    try {
-        // Make GET request to /login to retrieve CSRF token
-        const response = await fetch(AUTH_BASE_URL + '/login', {
-            method: 'GET',
-            // Include credentials so browser sends/receives cookies (JSESSIONID)
-            credentials: 'include'
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to retrieve CSRF token.');
+function getCsrfTokenFromCookie() {
+    // Read the XSRF-TOKEN cookie set by Spring Security
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        const trimmed = cookie.trim();
+        if (trimmed.startsWith('XSRF-TOKEN=')) {
+            return trimmed.substring('XSRF-TOKEN='.length);
         }
-
-        // Parse the response to get the CSRF token
-        const data = await response.json();
-
-        // Inject the CSRF token into the hidden input field
-        const csrfInput = document.querySelector('#csrf-token');
-        if (csrfInput && data.token) {
-            csrfInput.value = data.token;
-        }
-
-        return data.token;
-
-    } catch (error) {
-        console.error('CSRF token fetch error:', error.message);
     }
+    return '';
 }
 
 // Select the login form
 const loginForm = document.querySelector('#login-form');
 
 if (loginForm) {
-    // Fetch CSRF token on page load when on login page
-    fetchCsrfToken();
+
+    /**
+     * Fetches the login page first to trigger Spring Security
+     * to set the XSRF-TOKEN cookie, then injects it into the form.
+     */
+    async function initCsrfToken() {
+        try {
+            // GET /login to trigger Spring Security to set XSRF-TOKEN cookie
+            await fetch(AUTH_BASE_URL + '/login', {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            // Get CSRF token from cookie and inject into hidden input
+            const csrfToken = getCsrfTokenFromCookie();
+            const csrfInput = document.querySelector('#csrf-token');
+            if (csrfInput) {
+                csrfInput.value = csrfToken;
+            }
+        } catch (error) {
+            console.error('CSRF init error:', error.message);
+        }
+    }
+
+    // Initialize CSRF token on page load
+    initCsrfToken();
 
     /**
      * Handles login form submission.
-     * Sends username, password, and CSRF token to the backend.
-     * Ensures JSESSIONID cookie is sent with subsequent requests via credentials: include.
+     * Sends username, password, and CSRF token to Spring Security.
+     * Browser automatically stores JSESSIONID cookie on success.
+     *
+     * @param {Event} event - The form submit event.
      */
     loginForm.addEventListener('submit', async function(event) {
-        // Prevent default form submission
         event.preventDefault();
 
         const username = document.querySelector('#username').value.trim();
         const password = document.querySelector('#password').value.trim();
-        const csrfToken = document.querySelector('#csrf-token').value;
+        const csrfToken = getCsrfTokenFromCookie();
         const loginError = document.querySelector('#login-error');
 
         try {
-            // POST login credentials and CSRF token to backend
+            // POST credentials to Spring Security login endpoint
             const response = await fetch(AUTH_BASE_URL + '/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRF-TOKEN': csrfToken
                 },
-                // credentials: include ensures browser sends and stores JSESSIONID cookie
+                // credentials: include ensures JSESSIONID cookie is sent and stored
                 credentials: 'include',
                 body: 'username=' + encodeURIComponent(username) +
                       '&password=' + encodeURIComponent(password) +
@@ -577,13 +583,8 @@ if (loginForm) {
             // Made by Member: Novio, Mariel Kimberly B.
             // ============================================
 
-            /**
-             * Intercepts 401 Unauthorized and 403 Forbidden errors.
-             * Redirects to login page on 401.
-             * Shows Access Denied message on 403.
-             */
             if (response.status === 401) {
-                // 401: Not logged in - show error message
+                // 401 Unauthorized: Invalid credentials
                 loginError.style.display = 'block';
                 loginError.textContent = 'Invalid username or password. Please try again.';
                 console.error('401 Unauthorized: Invalid credentials.');
@@ -591,7 +592,7 @@ if (loginForm) {
             }
 
             if (response.status === 403) {
-                // 403: Forbidden - show access denied message
+                // 403 Forbidden: Access denied
                 loginError.style.display = 'block';
                 loginError.textContent = 'Access Denied. You do not have permission.';
                 console.error('403 Forbidden: Access denied.');
@@ -607,10 +608,86 @@ if (loginForm) {
             window.location.href = 'landing.html';
 
         } catch (error) {
-            // Show error message to user
             loginError.style.display = 'block';
             loginError.textContent = 'Login failed. Please try again.';
             console.error('Login error:', error.message);
+        }
+    });
+}
+
+// ============================================
+// TASK 6 – Sign Up / Register
+// Made by Member: Novio, Mariel Kimberly B.
+// ============================================
+
+const signupForm = document.querySelector('#signup-form');
+
+if (signupForm) {
+    /**
+     * Handles signup form submission.
+     * Sends username and password to the backend register endpoint.
+     * Default role is USER.
+     *
+     * @param {Event} event - The form submit event.
+     */
+    signupForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const username = document.querySelector('#username').value.trim();
+        const password = document.querySelector('#password').value.trim();
+        const confirm = document.querySelector('#confirm').value.trim();
+        const signupMessage = document.querySelector('#signup-message');
+
+        // Check if passwords match
+        if (password !== confirm) {
+            signupMessage.style.display = 'block';
+            signupMessage.style.color = 'red';
+            signupMessage.textContent = 'Passwords do not match.';
+            return;
+        }
+
+        try {
+            // POST to register endpoint
+            const response = await fetch(AUTH_BASE_URL + '/api/v1/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                    role: 'USER'
+                })
+            });
+
+            if (response.status === 400) {
+                const errorText = await response.text();
+                signupMessage.style.display = 'block';
+                signupMessage.style.color = 'red';
+                signupMessage.textContent = errorText;
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error('Registration failed with status: ' + response.status);
+            }
+
+            // Registration successful
+            signupMessage.style.display = 'block';
+            signupMessage.style.color = 'green';
+            signupMessage.textContent = 'Account created successfully! Redirecting to login...';
+
+            // Redirect to login page after 2 seconds
+            setTimeout(function() {
+                window.location.href = 'login.html';
+            }, 2000);
+
+        } catch (error) {
+            signupMessage.style.display = 'block';
+            signupMessage.style.color = 'red';
+            signupMessage.textContent = 'Registration failed. Please try again.';
+            console.error('Signup error:', error.message);
         }
     });
 }
@@ -620,29 +697,33 @@ if (loginForm) {
 // ============================================
 
 /**
- * Checks if the user is logged in by fetching user info from the backend.
- * Redirects to login page if the user is not authenticated (401).
- * Shows Access Denied message if the user lacks permission (403).
- *
- * @returns {Promise<boolean>} True if logged in, false otherwise.
+ * Checks if the user is logged in by making an authenticated request.
+ * Redirects to login page if 401 Unauthorized.
+ * Shows Access Denied message if 403 Forbidden.
  */
 async function checkAuth() {
     try {
-        const response = await fetch(AUTH_BASE_URL + '/api/v1/user/me', {
+        const response = await fetch(AUTH_BASE_URL + '/api/v1/auth/me', {
             method: 'GET',
-            // Send JSESSIONID cookie with request
-            credentials: 'include'
+            credentials: 'include',
+            // redirect: manual lets us catch the 302 redirect
+            redirect: 'manual'
         });
 
+        // 302 redirect means not logged in - Spring Security redirects to /login
+        if (response.type === 'opaqueredirect' || response.status === 302 || response.status === 0) {
+            console.error('Not logged in: Redirecting to login.');
+            window.location.href = 'login.html';
+            return false;
+        }
+
         if (response.status === 401) {
-            // Not logged in - redirect to login page
             console.error('401 Unauthorized: Redirecting to login.');
             window.location.href = 'login.html';
             return false;
         }
 
         if (response.status === 403) {
-            // Logged in but no permission - show access denied
             console.error('403 Forbidden: Access denied.');
             alert('Access Denied. You do not have permission to view this page.');
             window.location.href = 'landing.html';
